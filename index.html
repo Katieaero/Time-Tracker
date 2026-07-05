@@ -4,16 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Better SEO -->
+  <!-- SEO -->
   <title>Crochet & Knitting Project Time Tracker - Free Online Tool</title>
   <meta name="description" content="Free online Crochet and Knitting Project Time Tracker. Track time on your yarn projects, save logs, and stay organized. Perfect for crocheters and knitters.">
   <meta name="keywords" content="crochet time tracker, knitting time tracker, crochet project timer, knitting project tracker, free yarn time tracker, craft project timer, crochet planner">
   <meta name="author" content="Katieaero">
   <link rel="canonical" href="https://katieaero.github.io/Time-Tracker/">
 
-<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-  
-  <!-- Social Media Sharing -->
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Social Media -->
   <meta property="og:title" content="Crochet & Knitting Project Time Tracker">
   <meta property="og:description" content="Free tool to track time spent on crochet and knitting projects.">
   <meta property="og:url" content="https://katieaero.github.io/Time-Tracker/">
@@ -127,7 +128,6 @@
     }
   </style>
 </head>
-
 <body>
   <h1>Crochet & Knitting Project Time Tracker</h1>
   <p>Track your crochet & knitting project time</p>
@@ -138,24 +138,36 @@
   <button id="stopBtn">Stop</button>
   <button id="finishBtn">Finish Project</button>
   <button id="resetBtn">Reset</button>
-
   <div id="logContainer"></div>
-
   <footer>Made by Katie to all Crocheters and Knitters 🧶</footer>
 
-<div style="max-width: 700px; margin: 40px auto; text-align: left; padding: 20px;">
-  <h2>Perfect for Crocheters & Knitters</h2>
-  <p>Stop guessing how long that blanket or sweater is taking. This free tool helps you track time on every project, save your logs, and stay motivated.</p>
-  
-  <h2>How to Use</h2>
-  <ol>
-    <li>Enter your project name</li>
-    <li>Click <strong>Start</strong> when you begin working</li>
-    <li>Click <strong>Stop</strong> or <strong>Finish Project</strong> to save</li>
-    <li>Your past projects are saved automatically</li>
-  </ol>
-</div>
-  
+  <!-- SEO Content -->
+  <div style="max-width: 700px; margin: 40px auto; text-align: left; padding: 20px;">
+    <h2>Perfect for Crocheters & Knitters</h2>
+    <p>Stop guessing how long that blanket or sweater is taking. This free tool helps you track time on every project, save your logs, and stay motivated.</p>
+    
+    <h2>How to Use</h2>
+    <ol>
+      <li>Enter your project name</li>
+      <li>Click <strong>Start</strong> when you begin working</li>
+      <li>Click <strong>Stop</strong> or <strong>Finish Project</strong> to save</li>
+      <li>Your past projects are saved automatically</li>
+    </ol>
+  </div>
+
+  <!-- Comment Section -->
+  <div style="max-width: 700px; margin: 40px auto; padding: 20px; text-align: left; background-color: #fffacd; border-radius: 12px; box-shadow: 2px 2px 8px #d8bfd8;">
+    <h2>💬 Share Your Projects</h2>
+    <p>Tell others how long your latest project took! (Comments saved in your browser)</p>
+    
+    <textarea id="commentInput" placeholder="e.g. I finished a baby blanket in 12 hours! What about you?" 
+              style="width: 100%; height: 80px; padding: 10px; border-radius: 8px; border: 2px solid #a0e7e5; font-family: 'VT323', monospace;"></textarea>
+    <br><br>
+    <button onclick="addComment()" style="background-color: #b0e57c; padding: 10px 20px;">Post Comment</button>
+    
+    <div id="commentsContainer" style="margin-top: 20px; max-height: 400px; overflow-y: auto;"></div>
+  </div>
+
   <script>
     let startTime, interval, totalElapsed = 0;
     let running = false;
@@ -171,12 +183,10 @@
     }
 
     function saveProjects() {
-      const entries = Array.from(document.querySelectorAll('.logEntry')).map(entry => {
-        return {
-          name: entry.querySelector('strong').textContent,
-          time: entry.querySelector('br').nextSibling.textContent.trim()
-        };
-      });
+      const entries = Array.from(document.querySelectorAll('.logEntry')).map(entry => ({
+        name: entry.querySelector('strong').textContent,
+        time: entry.querySelector('br').nextSibling.textContent.trim()
+      }));
       localStorage.setItem('projectLogs', JSON.stringify(entries));
     }
 
@@ -190,18 +200,37 @@
       const entry = document.createElement('div');
       entry.className = 'logEntry';
       entry.innerHTML = `<strong>${name}</strong><br>Time Spent: ${time}`;
-
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'deleteBtn';
-      deleteBtn.onclick = () => {
-        entry.remove();
-        saveProjects();
-      };
-
+      deleteBtn.onclick = () => { entry.remove(); saveProjects(); };
       entry.appendChild(deleteBtn);
       logContainer.prepend(entry);
     }
 
+    // Comment Functions
+    function loadComments() {
+      const saved = JSON.parse(localStorage.getItem('projectComments') || '[]');
+      const container = document.getElementById('commentsContainer');
+      container.innerHTML = '';
+      saved.forEach(comment => {
+        const div = document.createElement('div');
+        div.style.cssText = 'background: #d0f4de; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 2px solid #a0e7e5;';
+        div.innerHTML = `<strong>Anonymous Crafter:</strong><br>${comment}`;
+        container.appendChild(div);
+      });
+    }
+
+    function addComment() {
+      const input = document.getElementById('commentInput');
+      if (input.value.trim() === '') return;
+      const saved = JSON.parse(localStorage.getItem('projectComments') || '[]');
+      saved.push(input.value.trim());
+      localStorage.setItem('projectComments', JSON.stringify(saved));
+      input.value = '';
+      loadComments();
+    }
+
+    // Button Events
     document.getElementById('startBtn').onclick = () => {
       if (!running) {
         startTime = new Date();
@@ -224,13 +253,10 @@
         totalElapsed += new Date() - startTime;
         running = false;
       }
-
       const projectName = document.getElementById('projectName').value || "Unnamed Project";
       const timeSpent = document.getElementById('timer').textContent;
-
       addLogEntry(projectName, timeSpent);
       saveProjects();
-
       totalElapsed = 0;
       document.getElementById('timer').textContent = "00:00:00";
       document.getElementById('projectName').value = "";
@@ -244,7 +270,11 @@
       document.getElementById('projectName').value = "";
     };
 
-    window.onload = loadProjects;
+    // Load everything on page load
+    window.onload = () => {
+      loadProjects();
+      loadComments();
+    };
   </script>
 </body>
 </html>
