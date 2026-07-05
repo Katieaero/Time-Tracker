@@ -1,17 +1,16 @@
 # 🧶 Crochet & Knitting Project Time Tracker
 
-A free, browser-based tool for tracking time spent on crochet and knitting projects. Built with HTML for simplicity and accessibility—no downloads or logins required.
+**Free online tool** specifically made for tracking time on crochet and knitting projects.
 
-## 🔗 Try It Now
-👉 [Live site](https://katieaero.github.io/Time-Tracker/)
+👉 **[Try it now](https://katieaero.github.io/Time-Tracker/)**
 
-## ✨ Features
-- Start/Stop/Finish buttons
-- Project name input
-- Reset option
-- Works offline once loaded
+## Features
+- Real-time timer
+- Project name logging
+- Automatic save (works offline)
+- Simple and cute design for crafters
 
-## 💡 Why It Exists
-Most time trackers aren’t built for yarn crafters. This one is.
+## Who is it for?
+Crocheters, knitters, and yarn hobbyists who want to track how long their WIPs (works in progress) actually take.
 
-
+Perfect for: amigurumi, blankets, sweaters, scarves, and more!
